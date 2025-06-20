@@ -1,0 +1,39 @@
+name: "Go Multi-Platform Build"
+description: "Build Go binaries for multiple platforms, package them, and output file list."
+
+inputs:
+  bin_name:
+    description: "Binary name, defaults to repo folder name"
+    required: false
+  main_go:
+    description: "Go main file or package, default '.'"
+    required: false
+    default: "main.go"
+  version:
+    description: "Version string, default from github ref"
+    required: false
+  add_files:
+    description: "Extra files or directories to include, separated by space"
+    required: false
+  dist_root_path:
+    description: "Output directory, default 'dist'"
+    required: false
+    default: "dist"
+
+
+branding:
+  icon: 'airplay'
+  color: 'red'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run Golang Multi-Platform Build
+      shell: bash
+      run: bash "${{ github.action_path }}/entry.sh"
+      env:
+        BIN_NAME: ${{ inputs.bin_name }}
+        MAIN_GO: ${{ inputs.main_go }}
+        VERSION: ${{ inputs.version }}
+        ADD_FILES: ${{ inputs.add_files }}
+        DIST_ROOT_PATH: ${{ inputs.dist_root_path }}
