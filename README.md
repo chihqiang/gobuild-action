@@ -2,25 +2,26 @@
 
 This GitHub Action builds Go binaries for multiple platforms, packages them into `.zip` or `.tar.gz` files, and outputs a list of generated archive files.
 
-## ✨Features
+## ✨ Features
 
-- Supports building for Windows, Linux, macOS on amd64 and arm64 architectures
-- Injects version info into the binary
-- Supports including additional files or directories in the package
-- Generates SHA256 and MD5 checksum files
-- Outputs a space-separated list of created archive files for downstream steps
+- ✅ Supports building for **Windows / Linux / macOS** on `amd64` and `arm64`
+- ✅ Injects version info (`-X main.version`) into the binary
+- ✅ Supports including extra files (README, LICENSE, config, etc.)
+- ✅ Generates **SHA256** and **MD5** checksum files
+- ✅ Outputs a **space-separated list of generated archives** for downstream steps
 
 ## 📦 Usage
 
-### 🔧 Inputs
+## 🔧 Inputs
 
-| Name             | Description                               | Type   | Default         | Required |
-| ---------------- | ----------------------------------------- | ------ | --------------- | -------- |
-| `bin_name`       | Binary name, defaults to repo name        | string | -               | no       |
-| `main_go`        | Go main file or package path              | string | `main.go`       | no       |
-| `version`        | Version string, defaults to GitHub ref    | string | `${GITHUB_REF}` | no       |
-| `add_files`      | Extra files/directories (space separated) | string | ""              | no       |
-| `dist_root_path` | Output directory                          | string | `dist`          | no       |
+| Name             | Description                                                  | Type   | Default                                                      | Required |
+| ---------------- | ------------------------------------------------------------ | ------ | ------------------------------------------------------------ | -------- |
+| `bin_name`       | Binary name (defaults to repository folder name)             | string | -                                                            | no       |
+| `main_go`        | Go main file or package path                                 | string | `main.go`                                                    | no       |
+| `version`        | Version string (defaults to GitHub ref name, or `dev` if not set) | string | `${GITHUB_REF_NAME}`                                         | no       |
+| `add_files`      | Extra files/directories to include in the package (space separated) | string | `""`                                                         | no       |
+| `dist_root_path` | Output directory                                             | string | `dist`                                                       | no       |
+| `archs`          | Space-separated GOOS/GOARCH targets. e.g. `linux/amd64 darwin/arm64` | string | `windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64` | no       |
 
 ### 📁 Example workflow
 
@@ -60,11 +61,13 @@ jobs:
         run: echo "Built archive files: ${{ env.GOBUILD_FILES }}"
 ~~~
 
-### ⚙️ Outputs
+## ⚙️ Outputs
 
-| env Name        | Description                                                  |
-| --------------- | ------------------------------------------------------------ |
-| `GOBUILD_FILES` | Space-separated list of generated archive file paths (e.g. `dist/myapp_linux_amd64.tar.gz dist/myapp_windows_amd64.zip`) |
+| Name    | Description                                                  |
+| ------- | ------------------------------------------------------------ |
+| `files` | Space-separated list of archive file paths (`.zip`, `.tar.gz`, `.md5`, `.sha256`) |
+
+> ⚠️ The legacy environment variable `GOBUILD_FILES` is still available, but it's recommended to use the `files` output.
 
 ##  🤝 Contributing
 

@@ -3,14 +3,14 @@ description: "Build Go binaries for multiple platforms, package them, and output
 
 inputs:
   bin_name:
-    description: "Binary name, defaults to repo folder name"
+    description: "Binary name (default: repo folder name)"
     required: false
   main_go:
-    description: "Go main file or package, default '.'"
+    description: "Go main file or package (default: main.go)"
     required: false
     default: "main.go"
   version:
-    description: "Version string, default from github ref"
+    description: "Version string (default: github.ref_name or 'main')"
     required: false
   add_files:
     description: "Extra files or directories to include, separated by space"
@@ -19,7 +19,9 @@ inputs:
     description: "Output directory, default 'dist'"
     required: false
     default: "dist"
-
+  archs:
+    description: "Space-separated GOOS/GOARCH build targets (default: 'windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64')"
+    required: false
 
 branding:
   icon: 'airplay'
@@ -37,3 +39,4 @@ runs:
         VERSION: ${{ inputs.version }}
         ADD_FILES: ${{ inputs.add_files }}
         DIST_ROOT_PATH: ${{ inputs.dist_root_path }}
+        ARCHS: ${{ inputs.archs }}
