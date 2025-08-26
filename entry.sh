@@ -35,22 +35,19 @@ build() {
     else
         output_bin_name="${BIN_NAME}"
     fi
-
-    GOOS=${GOOS} GOARCH=${GOARCH} ${BUILD_ENVS} go build ${BUILD_FLAGS} -o "${dist_tmp_path}/${output_bin_name}" "${MAIN_GO}" || {
+    build_cmd="GOOS=${GOOS} GOARCH=${GOARCH} ${BUILD_ENVS} go build ${BUILD_FLAGS} -o ${dist_tmp_path}/${output_bin_name} ${MAIN_GO}"
+    eval "$build_cmd"|| {
         error "Build failed for ${GOOS}/${GOARCH}"
         exit 1
     }
-
     if [ -n "${ADD_FILES}" ]; then
         step "Adding extra files:"
         for f in ${ADD_FILES}; do
             [ -e "$f" ] && cp -r "$f" "${dist_tmp_path}/"
         done
     fi
-
     local compression_name="${BIN_NAME}_${GOOS}_${GOARCH}"
     local compression_filename
-
     if [ "$GOOS" == "windows" ]; then
         compression_filename="${compression_name}.zip"
         (cd "${dist_tmp_path}" && zip -r "../${compression_filename}" .)
@@ -58,7 +55,6 @@ build() {
         compression_filename="${compression_name}.tar.gz"
         (cd "${dist_tmp_path}" && tar -czf "../${compression_filename}" .)
     fi
-
     success "Packed: ${DIST_ROOT_PATH}/${compression_filename}"
 }
 
