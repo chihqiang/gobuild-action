@@ -7,6 +7,9 @@ DIST_ROOT_PATH="${DIST_ROOT_PATH:-"dist"}"
 MAIN_GO="${MAIN_GO:-"main.go"}"
 VERSION="${VERSION:-${GITHUB_REF_NAME:-"main"}}"
 ADD_FILES="${ADD_FILES:-""}"
+BUILD_ENVS="${BUILD_ENVS:-"CGO_ENABLED=0"}"
+BUILD_FLAGS="${BUILD_FLAGS:-"-ldflags '-s -w -X main.version=${VERSION}'"}"
+
 
 # 默认构建目标（可通过 ARCHS 覆盖）
 ARCHS="${ARCHS:-"windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64"}"
@@ -33,9 +36,7 @@ build() {
         output_bin_name="${BIN_NAME}"
     fi
 
-    GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 \
-        go build -ldflags="-s -w -X main.version=${VERSION}" \
-        -o "${dist_tmp_path}/${output_bin_name}" "${MAIN_GO}" || {
+    GOOS=${GOOS} GOARCH=${GOARCH} ${BUILD_ENVS} go build ${BUILD_FLAGS} -o "${dist_tmp_path}/${output_bin_name}" "${MAIN_GO}" || {
         error "Build failed for ${GOOS}/${GOARCH}"
         exit 1
     }

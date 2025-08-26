@@ -22,6 +22,12 @@ inputs:
   archs:
     description: "Space-separated GOOS/GOARCH build targets (default: 'windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64')"
     required: false
+  build_envs:
+    description: "Extra build environment variables (default: 'CGO_ENABLED=0')"
+    required: false
+  build_flags:
+    description: "Extra go build flags (default: \"-ldflags '-s -w -X main.version=${VERSION}'\")"
+    required: false
 
 branding:
   icon: 'airplay'
@@ -40,3 +46,5 @@ runs:
         ADD_FILES: ${{ inputs.add_files }}
         DIST_ROOT_PATH: ${{ inputs.dist_root_path }}
         ARCHS: ${{ inputs.archs }}
+        BUILD_ENVS: ${{ inputs.build_envs }}
+        BUILD_FLAGS: ${{ inputs.build_flags }}
