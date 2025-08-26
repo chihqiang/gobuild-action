@@ -36,6 +36,7 @@ build() {
         output_bin_name="${BIN_NAME}"
     fi
     build_cmd="GOOS=${GOOS} GOARCH=${GOARCH} ${BUILD_ENVS} go build ${BUILD_FLAGS} -o ${dist_tmp_path}/${output_bin_name} ${MAIN_GO}"
+    step "Running build command: ${build_cmd}"
     eval "$build_cmd"|| {
         error "Build failed for ${GOOS}/${GOARCH}"
         exit 1
