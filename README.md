@@ -22,12 +22,12 @@ This GitHub Action builds Go binaries for multiple platforms, packages them into
 | `add_files`      | Extra files/directories to include in the package (space separated) | string | `""`                                                         | no       |
 | `dist_root_path` | Output directory                                             | string | `dist`                                                       | no       |
 | `archs`          | Space-separated GOOS/GOARCH targets. e.g. `linux/amd64 darwin/arm64` | string | `windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64` | no       |
-| build_envs       | Extra build environment variables                            | string | CGO_ENABLED=0                                                | no       |
-| build_flags      | Extra go build flags                                         | string | -ldflags '-s -w -X main.version=${VERSION}'                  | no       |
+| `build_envs`     | Extra build environment variables                            | string | `CGO_ENABLED=0`                                              | no       |
+| `build_flags`    | Extra go build flags                                         | string | `-ldflags '-s -w -X main.version=${VERSION}'`                | no       |
 
 ### 📁 Example workflow
 
-~~~
+~~~yaml
 name: Build and Package Go Binaries
 
 on:
@@ -71,6 +71,6 @@ jobs:
 
 > ⚠️ The legacy environment variable `GOBUILD_FILES` is still available, but it's recommended to use the `files` output.
 
-##  🤝 Contributing
+## 🤝 Contributing
 
 Feel free to open issues or PRs to improve this multi-platform Go build action!
