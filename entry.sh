@@ -72,9 +72,18 @@ build_all
 
 # ===== 生成统一校验文件 =====
 step "Generating checksums..."
-sha256sum "${DIST_ROOT_PATH}"/*.{zip,tar.gz} > "${DIST_ROOT_PATH}/${BIN_NAME}_${VERSION}_checksums.sha256"
-md5sum    "${DIST_ROOT_PATH}"/*.{zip,tar.gz} > "${DIST_ROOT_PATH}/${BIN_NAME}_${VERSION}_checksums.md5"
-success "Checksums generated in ${DIST_ROOT_PATH}"
+shopt -s nullglob
+files=("${DIST_ROOT_PATH}"/*.{zip,tar.gz})
+# 排除已有 checksum 文件
+files=("${files[@]##*checksums*}")
+
+if [ ${#files[@]} -eq 0 ]; then
+    echo "⚠️ No zip or tar.gz files found in ${DIST_ROOT_PATH}, skipping checksum generation."
+else
+    sha256sum "${files[@]}" > "${DIST_ROOT_PATH}/${BIN_NAME}_${VERSION}_checksums.sha256"
+    md5sum    "${files[@]}" > "${DIST_ROOT_PATH}/${BIN_NAME}_${VERSION}_checksums.md5"
+    success "Checksums generated in ${DIST_ROOT_PATH}"
+fi
 
 # ===== 输出构建文件列表 =====
 files=$(ls "${DIST_ROOT_PATH}"/*.{zip,tar.gz,md5,sha256} 2>/dev/null | tr '\n' ' ')
