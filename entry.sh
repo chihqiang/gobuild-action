@@ -91,5 +91,5 @@ if [ -n "${GITHUB_ENV:-}" ]; then
   echo "GOBUILD_FILES=${files}" >> "$GITHUB_ENV"
 fi
 if [ -n "${GITHUB_OUTPUT:-}" ]; then
-  echo "files=${files}" >> "$GITHUB_OUTPUT"
+  echo "gobuild_files=${files}" >> "$GITHUB_OUTPUT"
 fi

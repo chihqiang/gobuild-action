@@ -67,9 +67,9 @@ jobs:
 
 | Name    | Description                                                  |
 | ------- | ------------------------------------------------------------ |
-| `files` | Space-separated list of archive file paths (`.zip`, `.tar.gz`, `.md5`, `.sha256`) |
+| `gobuild_files` | Space-separated list of archive file paths (`.zip`, `.tar.gz`, `.md5`, `.sha256`) |
 
-> ⚠️ The legacy environment variable `GOBUILD_FILES` is still available, but it's recommended to use the `files` output.
+> ⚠️ The legacy environment variable `GOBUILD_FILES` is still available, but it's recommended to use the `gobuild_files` output.
 
 ## 🤝 Contributing
 
