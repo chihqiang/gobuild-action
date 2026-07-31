@@ -110,11 +110,13 @@ var GoBinaryBuilder = class {
 	argumentParser;
 	fileCopier;
 	artifactNaming;
-	constructor(runner, argumentParser, fileCopier, artifactNaming) {
+	logger;
+	constructor(runner, argumentParser, fileCopier, artifactNaming, logger) {
 		this.runner = runner;
 		this.argumentParser = argumentParser;
 		this.fileCopier = fileCopier;
 		this.artifactNaming = artifactNaming;
+		this.logger = logger;
 	}
 	async goVersion() {
 		return (await this.runner.run("go", ["version"])).stdout.trim();
@@ -135,19 +137,24 @@ var GoBinaryBuilder = class {
 			GOARCH: target.goarch,
 			...this.argumentParser.parseEnvs(options.buildEnvs)
 		};
-		if ((await this.runner.run("go", [
+		const args = [
 			"build",
 			...flags,
 			"-o",
 			outputPath,
 			options.mainGo
-		], {
+		];
+		this.logger.info(`$ GOOS=${target.goos} GOARCH=${target.goarch} go ${this.formatCommand(args)}`);
+		if ((await this.runner.run("go", args, {
 			cwd,
 			env,
 			stdio: "inherit"
 		})).code !== 0) throw new Error(`Go build failed for ${target.goos}/${target.goarch}`);
 		await this.fileCopier.copy(options.addFiles, distDir, cwd);
 		return outputPath;
+	}
+	formatCommand(args) {
+		return args.map((arg) => arg.includes(" ") ? `'${arg}'` : arg).join(" ");
 	}
 };
 //#endregion
@@ -32993,14 +33000,15 @@ var TargetParser = class {
 //#endregion
 //#region src/index.ts
 var artifactNaming = new ArtifactNaming();
+var logger = new Logger();
 new BuildCoordinator({
 	inputReader: new InputReader(),
 	targetParser: new TargetParser(),
-	binaryBuilder: new GoBinaryBuilder(new CommandRunner(), new ShellArgumentParser(), new ExtraFileCopier(), artifactNaming),
+	binaryBuilder: new GoBinaryBuilder(new CommandRunner(), new ShellArgumentParser(), new ExtraFileCopier(), artifactNaming, logger),
 	archivePacker: new ArchivePacker(),
 	checksumGenerator: new ChecksumGenerator(),
 	outputWriter: new OutputWriter(),
 	artifactNaming,
-	logger: new Logger()
+	logger
 }).run();
 //#endregion

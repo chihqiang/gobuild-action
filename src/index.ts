@@ -12,6 +12,7 @@ import { ArchivePacker } from './packer';
 import { TargetParser } from './targets';
 
 const artifactNaming = new ArtifactNaming();
+const logger = new Logger();
 const coordinator = new BuildCoordinator({
   inputReader: new InputReader(),
   targetParser: new TargetParser(),
@@ -20,12 +21,13 @@ const coordinator = new BuildCoordinator({
     new ShellArgumentParser(),
     new ExtraFileCopier(),
     artifactNaming,
+    logger,
   ),
   archivePacker: new ArchivePacker(),
   checksumGenerator: new ChecksumGenerator(),
   outputWriter: new OutputWriter(),
   artifactNaming,
-  logger: new Logger(),
+  logger,
 });
 
 void coordinator.run();

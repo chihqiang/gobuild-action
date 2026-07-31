@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -8,6 +8,7 @@ import { ArtifactNaming } from '../src/naming';
 import { CommandRunner } from '../src/commandRunner';
 import { ShellArgumentParser } from '../src/arguments';
 import { GoBinaryBuilder } from '../src/builder';
+import type { LoggerContract } from '../src/interfaces';
 
 function hostTarget(): { goos: GOOS; goarch: GOARCH } {
   const goosMap: Record<string, GOOS> = {
@@ -45,11 +46,18 @@ describe('ExtraFileCopier.copy', () => {
 });
 
 describe('GoBinaryBuilder (integration)', () => {
+  const logger = {
+    step: vi.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+  } satisfies LoggerContract;
   const builder = new GoBinaryBuilder(
     new CommandRunner(),
     new ShellArgumentParser(),
     new ExtraFileCopier(),
     new ArtifactNaming(),
+    logger,
   );
 
   it('reports go version', async () => {
@@ -87,7 +95,14 @@ describe('GoBinaryBuilder (integration)', () => {
       };
       await fs.writeFile(path.join(tempDir, 'LICENSE'), 'mit');
 
+      logger.info.mockClear();
       const binaryPath = await builder.build(hostTarget(), options);
+
+      const printed = logger.info.mock.calls.map((c) => c[0] as string).join('\n');
+      expect(printed).toContain('$ GOOS=');
+      expect(printed).toContain('-ldflags');
+      expect(printed).toContain(`main.version=9.9.9`);
+      expect(printed).toContain('main.go');
 
       const host = hostTarget();
       await expect(fs.stat(binaryPath)).resolves.toBeTruthy();

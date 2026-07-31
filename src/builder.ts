@@ -1,6 +1,15 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type { ArtifactNamingContract, BinaryBuilderContract, BuildOptions, BuildTarget, CommandRunnerContract, FileCopierContract, ArgumentParserContract } from './interfaces';
+import type {
+  ArgumentParserContract,
+  ArtifactNamingContract,
+  BinaryBuilderContract,
+  BuildOptions,
+  BuildTarget,
+  CommandRunnerContract,
+  FileCopierContract,
+  LoggerContract,
+} from './interfaces';
 
 export class GoBinaryBuilder implements BinaryBuilderContract {
   constructor(
@@ -8,6 +17,7 @@ export class GoBinaryBuilder implements BinaryBuilderContract {
     private readonly argumentParser: ArgumentParserContract,
     private readonly fileCopier: FileCopierContract,
     private readonly artifactNaming: ArtifactNamingContract,
+    private readonly logger: LoggerContract,
   ) {}
 
   async goVersion(): Promise<string> {
@@ -31,7 +41,10 @@ export class GoBinaryBuilder implements BinaryBuilderContract {
       ...this.argumentParser.parseEnvs(options.buildEnvs),
     };
 
-    const result = await this.runner.run('go', ['build', ...flags, '-o', outputPath, options.mainGo], {
+    const args = ['build', ...flags, '-o', outputPath, options.mainGo];
+    this.logger.info(`$ GOOS=${target.goos} GOARCH=${target.goarch} go ${this.formatCommand(args)}`);
+
+    const result = await this.runner.run('go', args, {
       cwd,
       env,
       stdio: 'inherit',
@@ -42,5 +55,9 @@ export class GoBinaryBuilder implements BinaryBuilderContract {
 
     await this.fileCopier.copy(options.addFiles, distDir, cwd);
     return outputPath;
+  }
+
+  private formatCommand(args: readonly string[]): string {
+    return args.map((arg) => (arg.includes(' ') ? `'${arg}'` : arg)).join(' ');
   }
 }
