@@ -48,7 +48,7 @@ describe('InputReader', () => {
     expect(inputs.addFiles).toEqual([]);
     expect(inputs.distRootPath).toBe('dist');
     expect(inputs.buildEnvs).toBe('CGO_ENABLED=0');
-    expect(inputs.buildFlags).toContain('main.version=v1.2.3');
+    expect(inputs.buildFlags).toContain('main.version=${VERSION}');
     expect(inputs.archs).toContain('linux/amd64');
   });
 

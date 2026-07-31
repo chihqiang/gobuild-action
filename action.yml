@@ -15,6 +15,7 @@ inputs:
   add_files:
     description: "Extra files or directories to include, separated by space"
     required: false
+    default: ""
   dist_root_path:
     description: "Output directory, default 'dist'"
     required: false
@@ -22,12 +23,15 @@ inputs:
   archs:
     description: "Space-separated GOOS/GOARCH build targets (default: 'windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64')"
     required: false
+    default: "windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64"
   build_envs:
     description: "Extra build environment variables (default: 'CGO_ENABLED=0')"
     required: false
+    default: "CGO_ENABLED=0"
   build_flags:
     description: "Extra go build flags (default: -ldflags '-s -w -X main.version=${VERSION}')"
     required: false
+    default: "-ldflags '-s -w -X main.version=${VERSION}'"
 
 outputs:
   gobuild_files:

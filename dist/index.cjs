@@ -16530,7 +16530,7 @@ var InputReader = class {
 			distRootPath: getInput("dist_root_path") || "dist",
 			archs: getInput("archs") || "windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64",
 			buildEnvs: getInput("build_envs") || "CGO_ENABLED=0",
-			buildFlags: getInput("build_flags") || `-ldflags '-s -w -X main.version=${version}'`
+			buildFlags: getInput("build_flags") || `-ldflags '-s -w -X main.version=\${VERSION}'`
 		};
 	}
 };

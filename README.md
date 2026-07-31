@@ -6,7 +6,7 @@ Built with **TypeScript**, bundled with **Vite**, and tested with **Vitest**. Li
 
 ## ✨ Features
 
-- ✅ Supports building for **Windows / Linux / macOS** on `amd64` and `arm64`
+- ✅ Supports building for **every GOOS / GOARCH** in Go's official `go tool dist list` (Windows, Linux, macOS, FreeBSD, OpenBSD, etc.)
 - ✅ Injects version info (`-X main.version`) into the binary
 - ✅ Supports including extra files (README, LICENSE, config, etc.)
 - ✅ Packages into `.zip` / `.tar.gz` with pure-JS [`archiver`](https://www.npmjs.com/package/archiver) — no system `zip`/`tar` command required

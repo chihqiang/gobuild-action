@@ -16,7 +16,7 @@ export class InputReader implements InputReaderContract {
         'windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64',
       buildEnvs: core.getInput('build_envs') || 'CGO_ENABLED=0',
       buildFlags: core.getInput('build_flags') ||
-        `-ldflags '-s -w -X main.version=${version}'`,
+        `-ldflags '-s -w -X main.version=\${VERSION}'`,
     };
   }
 }
