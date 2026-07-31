@@ -286,8 +286,9 @@ var BuildCoordinator = class {
 		const entries = await node_fs_promises.default.readdir(distRootPath, { withFileTypes: true });
 		logger.step("Build outputs:");
 		for (const entry of entries.filter((e) => e.isFile()).sort()) {
-			const size = ((await node_fs_promises.default.stat(node_path.default.join(distRootPath, entry.name))).size / 1024).toFixed(1);
-			logger.info(`  ${entry.name}  (${size} KB)`);
+			const fullPath = node_path.default.join(distRootPath, entry.name);
+			const size = ((await node_fs_promises.default.stat(fullPath)).size / 1024).toFixed(1);
+			logger.info(`  ${fullPath}  (${size} KB)`);
 		}
 	}
 };

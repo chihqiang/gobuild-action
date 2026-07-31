@@ -65,9 +65,10 @@ export class BuildCoordinator {
     const entries = await fs.readdir(distRootPath, { withFileTypes: true });
     logger.step('Build outputs:');
     for (const entry of entries.filter((e) => e.isFile()).sort()) {
-      const stat = await fs.stat(path.join(distRootPath, entry.name));
+      const fullPath = path.join(distRootPath, entry.name);
+      const stat = await fs.stat(fullPath);
       const size = (stat.size / 1024).toFixed(1);
-      logger.info(`  ${entry.name}  (${size} KB)`);
+      logger.info(`  ${fullPath}  (${size} KB)`);
     }
   }
 }
