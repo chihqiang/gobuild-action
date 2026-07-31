@@ -26,25 +26,17 @@ inputs:
     description: "Extra build environment variables (default: 'CGO_ENABLED=0')"
     required: false
   build_flags:
-    description: "Extra go build flags (default: \"-ldflags '-s -w -X main.version=${VERSION}'\")"
+    description: "Extra go build flags (default: -ldflags '-s -w -X main.version=${VERSION}')"
     required: false
+
+outputs:
+  gobuild_files:
+    description: "Space-separated list of generated archive files (zip/tar.gz/md5/sha256)"
+
+runs:
+  using: 'node24'
+  main: 'dist/index.cjs'
 
 branding:
   icon: 'airplay'
   color: 'red'
-
-runs:
-  using: 'composite'
-  steps:
-    - name: Run Golang Multi-Platform Build
-      shell: bash
-      run: bash "${{ github.action_path }}/entry.sh"
-      env:
-        BIN_NAME: ${{ inputs.bin_name }}
-        MAIN_GO: ${{ inputs.main_go }}
-        VERSION: ${{ inputs.version }}
-        ADD_FILES: ${{ inputs.add_files }}
-        DIST_ROOT_PATH: ${{ inputs.dist_root_path }}
-        ARCHS: ${{ inputs.archs }}
-        BUILD_ENVS: ${{ inputs.build_envs }}
-        BUILD_FLAGS: ${{ inputs.build_flags }}
