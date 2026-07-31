@@ -17,11 +17,19 @@ describe('TargetParser.parse', () => {
   });
 
   it('rejects unsupported goos', () => {
-    expect(() => parser.parse('plan9/amd64')).toThrow(/Unsupported GOOS/);
+    expect(() => parser.parse('unknown/amd64')).toThrow(/Unsupported GOOS/);
   });
 
   it('rejects unsupported goarch', () => {
-    expect(() => parser.parse('linux/mips')).toThrow(/Unsupported GOARCH/);
+    expect(() => parser.parse('linux/unknownarch')).toThrow(/Unsupported GOARCH/);
+  });
+
+  it('accepts full go tool dist list values', () => {
+    expect(parser.parse('js/wasm')).toEqual([{ goos: GOOS.Js, goarch: GOARCH.Wasm }]);
+    expect(parser.parse('plan9/386')).toEqual([{ goos: GOOS.Plan9, goarch: GOARCH.X86 }]);
+    expect(parser.parse('linux/mips64le')).toEqual([
+      { goos: GOOS.Linux, goarch: GOARCH.Mips64Le },
+    ]);
   });
 
   it('parses multiple targets', () => {

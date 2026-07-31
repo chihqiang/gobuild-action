@@ -16556,21 +16556,38 @@ var Logger = class {
 //#endregion
 //#region src/enums.ts
 var GOOS = /* @__PURE__ */ function(GOOS) {
-	GOOS["Windows"] = "windows";
-	GOOS["Linux"] = "linux";
+	GOOS["Aix"] = "aix";
+	GOOS["Android"] = "android";
 	GOOS["Darwin"] = "darwin";
+	GOOS["Dragonfly"] = "dragonfly";
 	GOOS["FreeBSD"] = "freebsd";
+	GOOS["Illumos"] = "illumos";
+	GOOS["IOS"] = "ios";
+	GOOS["Js"] = "js";
+	GOOS["Linux"] = "linux";
+	GOOS["NetBSD"] = "netbsd";
 	GOOS["OpenBSD"] = "openbsd";
+	GOOS["Plan9"] = "plan9";
+	GOOS["Solaris"] = "solaris";
+	GOOS["Wasip1"] = "wasip1";
+	GOOS["Windows"] = "windows";
 	return GOOS;
 }({});
 var GOARCH = /* @__PURE__ */ function(GOARCH) {
-	GOARCH["Amd64"] = "amd64";
-	GOARCH["Arm64"] = "arm64";
-	GOARCH["Arm"] = "arm";
 	GOARCH["X86"] = "386";
+	GOARCH["Amd64"] = "amd64";
+	GOARCH["Arm"] = "arm";
+	GOARCH["Arm64"] = "arm64";
+	GOARCH["Loong64"] = "loong64";
+	GOARCH["Mips"] = "mips";
+	GOARCH["Mips64"] = "mips64";
+	GOARCH["Mips64Le"] = "mips64le";
+	GOARCH["MipsLe"] = "mipsle";
+	GOARCH["Ppc64"] = "ppc64";
 	GOARCH["Ppc64le"] = "ppc64le";
-	GOARCH["S390x"] = "s390x";
 	GOARCH["Riscv64"] = "riscv64";
+	GOARCH["S390x"] = "s390x";
+	GOARCH["Wasm"] = "wasm";
 	return GOARCH;
 }({});
 var CompressionFormat = /* @__PURE__ */ function(CompressionFormat) {
